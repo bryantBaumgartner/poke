@@ -365,8 +365,9 @@ svg#clouds {
 
 .img-container {
   display: flex;
-  width: 96%;
+  width: 94%;
   flex-wrap: wrap;
+  padding-right: 0 !important;
 }
 
 .img-wrap {
