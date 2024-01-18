@@ -40,59 +40,19 @@
   <!-- Terminal -->
   <div class="center card-container">
     <div class="terminal" [ngSwitch]="selection.value">
-      <pre id="type" *ngSwitchDefault style="text-align:left; font-size:1.2rem; text-transform:uppercase"></pre>
-      <pre id="type" *ngSwitchCase="'default'">C:\Users\Bryant\Angular> easterEgg.png
+      <pre id="type" *ngSwitchDefault class="motto"></pre>
+      <app-work *ngSwitchCase="'work'"></app-work>
+      <app-projects *ngSwitchCase="'project'"></app-projects>
+      <app-gallery *ngSwitchCase="'gallery'"></app-gallery>
+      <app-experience *ngSwitchCase="'experience'"></app-experience>
 
-<img src="./assets/meem.png" height="100" width="100" class="img-wrap" /></pre>
+      <pre *ngSwitchCase="'default'">C:\Users\Bryant\Angular> easterEgg.png
 
-      <pre *ngSwitchCase="'work'">
-Software Engineer<span style="color: #a7a7a7"> - TaxCloud LLC</span>
-<span style="font-size: 0.7rem; color: #a7a7a7">September 2022 - December 2023</span>
-
-Developer Support Liason<span style="color: #a7a7a7"> - TaxCloud LLC</span>
-<span style="font-size: 0.7rem; color: #a7a7a7">June 2022 - September 2023</span>
-
-Java SDET Trainee<span style="color: #a7a7a7"> - MThree</span>
-<span style="font-size: 0.7rem; color: #a7a7a7">Jan 2022 - March 2022</span>
-
-Front End<span style="color: #a7a7a7"> - Haggen Food & Pharmacy</span>
-<span style="font-size: 0.7rem; color: #a7a7a7">May 2018 - Jan 2019</span>
-</pre>
-
-      <pre *ngSwitchCase="'project'">Projects Placeholder
-</pre>
-
-      <pre *ngSwitchCase="'gallery'" class="img-container">
-<img src="./assets/modifiedLogo750.png" height="200" width="200" class="img-wrap" />
-<img src="./assets/meetingman.PNG" height="200" width="200" class="img-wrap" />
-<img src="./assets/meNotAnimated.PNG" height="200" width="200" class="img-wrap" />
-<img src="./assets/professional.png" height="200" width="200" class="img-wrap" />
-<img src="./assets/me.png" height="200" width="200" class="img-wrap" />
-<img src="./assets/dissapoint.png" height="200" width="200" class="img-wrap" />
-<img src="./assets/Screenshot_20230428-220310_Snapchat.jpg" height="200" width="200" class="img-wrap" />
-<img src="./assets/virus.PNG" height="200" width="200" class="img-wrap" />
-<img src="./assets/21-4-12 Saint MartinsIMG_0177.jpg" height="200" width="200" class="img-wrap" />
-</pre>
-
-      <pre *ngSwitchCase="'experience'">C#
-[▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱]
-
-C#
-[▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱]
-
-C#
-[▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱]
-
-C#
-[▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱]
-
-C#
-[▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱]
-</pre>
+<img src="./assets/meem.png" height="100" width="100" class="img-wrap" />
+      </pre>
     </div>
 
     <input type="hidden" #selection>
-
   </div>
 
   <!-- Footer -->
