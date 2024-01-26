@@ -257,6 +257,12 @@ a:hover {
     white-space: pre-wrap; /* Since CSS 2.1 */
   }
 
+.motto {
+  text-align: left;
+  font-size: 1.2rem;
+  text-transform: uppercase
+}
+
 .circle-link {
   height: 40px;
   width: 40px;
@@ -290,7 +296,7 @@ footer {
   text-shadow: 1px 1px 10px black;
 }
 
-  footer a {
+  footer circle-link {
     display: flex;
     align-items: center;
   }
@@ -361,18 +367,4 @@ svg#clouds {
     display: none;
     visibility: hidden;
   }
-}
-
-.img-container {
-  display: flex;
-  width: 96%;
-  flex-wrap: wrap;
-}
-
-.img-wrap {
-    display:block;
-    height: 10vw;
-    width: 10vw;
-    min-height: 100px;
-    min-width: 100px;
 }
