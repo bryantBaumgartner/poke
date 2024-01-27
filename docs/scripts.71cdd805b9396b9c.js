@@ -1,1 +1,0 @@
-var i=0,txt="Programming, It's What I Do",speed=50;function typeWriter(){i<txt.length&&null!=document.getElementById("type")&&(document.getElementById("type").innerHTML+=txt.charAt(i),i++,setTimeout(typeWriter,speed))}
