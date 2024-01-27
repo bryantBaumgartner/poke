@@ -1,4 +1,4 @@
-import { AfterContentInit, Component } from '@angular/core';
+import { OnInit, Component } from '@angular/core';
 
 declare function typeWriter(): any;
 
@@ -7,13 +7,6 @@ declare function typeWriter(): any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterContentInit {
-  title = 'angular';
-  i = 0;
-  txt = "> Programming, It's What I Do";
-  speed = 50;
-
-  ngAfterContentInit(): void {
-    typeWriter();
-  }
+export class AppComponent implements OnInit {
+  ngOnInit() { }
 }

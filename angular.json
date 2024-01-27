@@ -29,7 +29,6 @@
               "src/styles.css"
             ],
             "scripts": [
-              "src/assets/typewriter.js"
             ]
           },
           "configurations": {
