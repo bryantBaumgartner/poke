@@ -18,8 +18,31 @@ h6 {
   transition: ease all .5s;
 }
 
-p {
+h1 {
+  font-family:'Montserrat Subrayada';
+  font-size: 2.9375em;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 35px;
+}
+
+h3 {
+  font-family: Lato;
+  font-size: 1.0875em;
+  font-weight: 700;
   margin: 0;
+}
+
+p {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.1875em;
+  font-weight: 300;
+  margin: 0;
+  color:#efefef
+}
+
+a {
+  color: rgba(239,147,171,1);
 }
 
 .spacer {
@@ -28,10 +51,10 @@ p {
 
 .toolbar {
   position: fixed;
-  top: 10px;
+  top: 0px;
   left: 0;
   right: 0;
-  height: 50px;
+  height: 60px;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -76,9 +99,9 @@ p {
 .content {
   display: flex;
   margin: 82px auto 0px;
-  padding: 0 16px 100px;
-  max-width: 80vw;
-  flex-direction: row;
+  padding: 0 0 100px;
+  max-width: 100vw;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
   align-content: center;
@@ -111,22 +134,23 @@ p {
   flex: 1 0.5 content;
   width: var(--size);
   max-width: var(--size);
-  min-width:min-content;
+  min-width: 250px;
   text-align: center;
-  align-content:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin:8px;
-  overflow:hidden;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 8px;
+  margin-bottom: 32px;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .box {
-  padding: 10px;
-  color: black;
-  border: 1px solid black;
-  border-radius: 30px;
-  background-color: white;
-  box-shadow: 1px 1px black;
+  width: 100%;
+  max-width: 75vw;
+  background-color: rgb(42, 39, 56);
+  border-radius: 15px;
+  padding-top:20px;
 }
 
 .flex-column {
@@ -211,6 +235,11 @@ footer {
     align-items: center;
   }
 
+.side-menu {
+  border-radius: 30px;
+  transition: .5s ease-out;
+}
+
 svg#clouds {
   position: fixed;
   bottom: -160px;
@@ -227,6 +256,7 @@ svg#bubbles {
   width: 100%;
   min-height: 100%;
   max-height: 100%;
+  min-width: 1080px;
   z-index: -1;
 }
 
@@ -241,6 +271,12 @@ svg#bubbles {
   .toolbar {
     padding-left: 1vw;
     padding-right: 1vw;
+/*    background-color: #000000a0;
+    box-shadow: #000000a0 0px 10px 10px 2px;*/
+  }
+
+  .content {
+    max-width: 100vw;
   }
 
   footer {
@@ -258,9 +294,55 @@ svg#bubbles {
   }
 
   .card {
-      width:100vw;
-      min-width:100%;
-      margin-left:0;
-      margin-right:0;
+    min-width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
+
+  .flex-row {
+      min-width: 90% !important;
+      max-width: 90%;
+      border-radius:0;
+  }
+
+  .side-menu {
+    background-color: #00000060;
+  }
+
+  .box {
+      max-width:100vw;
+  }
+}
+
+.flex-row {
+  padding: 20px;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  overflow: visible;
+  flex: 1 1 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: var(--size);
+  min-width: var(--size);
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.line-height-20 {
+  line-height: 20px;
+}
+
+.secondary {
+  color: rgba(239,147,171,1);
+}
+
+.stock {
+    border-radius: 25px;
 }
