@@ -7,4 +7,5 @@ body {
 /*  background: linear-gradient(135deg, rgba(76,59,84,1) 80%, #ffffff 80%, #ffffff 95%, rgba(76,59,84,1) 95%, rgba(39,47,71,1) 100%);*/
   background-repeat: no-repeat;
   background-attachment: fixed;
+  margin: 0;
 }
