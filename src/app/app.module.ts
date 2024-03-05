@@ -1,26 +1,20 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { ApplicationConfig, Component, NgModule, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { Pokemon } from 'pokenode-ts';
+import { CommonModule } from '@angular/common';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { GalleryComponent } from './gallery/gallery.component';
-import { WorkComponent } from './work/work.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { ExperienceComponent } from './experience/experience.component';
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    GalleryComponent,
-    WorkComponent,
-    ProjectsComponent,
-    ExperienceComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+export const appConfig: ApplicationConfig = {
+  providers: [provideHttpClient()],
+}
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, CommonModule],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
-export class AppModule { }
+export class AppModule {
+
+checkAnswer(num: number){}
+}

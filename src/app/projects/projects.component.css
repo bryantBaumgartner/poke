@@ -1,9 +1,0 @@
-pre {
-  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-  color: white;
-  padding: 0 0 1rem;
-  margin: 0;
-  max-width: 100%;
-  height: auto;
-  white-space: pre-wrap; /* Since CSS 2.1 */
-}
