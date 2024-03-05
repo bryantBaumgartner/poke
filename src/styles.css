@@ -1,11 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-body {
-  padding: 0;
-  background-color: #221f28;
-/*  background: linear-gradient(180deg, rgba(34,31,40,1) 0%, rgba(52,40,57,1) 100%);*/
-  background: linear-gradient(180deg, rgba(76,59,84,1) 0%, rgba(39,47,71,1) 100%);
-/*  background: linear-gradient(135deg, rgba(76,59,84,1) 80%, #ffffff 80%, #ffffff 95%, rgba(76,59,84,1) 95%, rgba(39,47,71,1) 100%);*/
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+html {
   margin: 0;
+  padding: 0;
+  height:100vh;
+  background-color: #121b39ec;
+  /*  background: linear-gradient( 180deg, #2cc4d0ff 0%, #0c539aff 100% ) fixed;
+  background-repeat: no-repeat;*/
 }
