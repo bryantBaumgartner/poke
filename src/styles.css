@@ -3,7 +3,11 @@ html {
   margin: 0;
   padding: 0;
   height:100vh;
-  background-color: #121b39ec;
+  background-color: #ffffff;
   /*  background: linear-gradient( 180deg, #2cc4d0ff 0%, #0c539aff 100% ) fixed;
   background-repeat: no-repeat;*/
+}
+
+body {
+    margin:0;
 }
