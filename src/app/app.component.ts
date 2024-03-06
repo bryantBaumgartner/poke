@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
     this.total = 0;
     this.pokemon = [];
     this.images = [];
+    this.correct = "";
   }
 
   setScenario() {
