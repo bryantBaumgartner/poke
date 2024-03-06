@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Pokemon, PokemonClient } from 'pokenode-ts';
+import { Pokemon, PokemonClient, PokemonSpecies } from 'pokenode-ts';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,17 @@ export class ApiService {
       return pokemonData;
     } catch (error) {
       console.error(error);
-      return this.getPokemon("Bulbasaur");
+      return this.getPokemon("bulbasaur");
+    }
+  }
+
+  async getPokemonSpecies(name: string): Promise<PokemonSpecies> {
+    try {
+      const pokemonData = await this.api.getPokemonSpeciesByName(name);
+      return pokemonData;
+    } catch (error) {
+      console.error(error);
+      return await this.api.getPokemonSpeciesByName("bulbasaur");
     }
   }
 }

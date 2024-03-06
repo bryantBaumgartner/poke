@@ -1,6 +1,36 @@
+<main *ngIf="mode == -1">
+  <header>
+    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
+    <div class="fill"></div>
+    <h2 class="click" (click)="setMode(-1)">About</h2>
+  </header>
+
+  <div class="content">
+    <div class="center">
+      <div class="center">
+        <h1>POKeMPARISON</h1>
+        <p>Pokemparison is an Angular app created by Bryant Baumgartner. Pokemparisons is hosted using Git Pages. Any comments or issues can be left in the <a href="https://github.com/bryantBaumgartner/poke/issues">issues tab</a> on the Pokemparisons <a href="https://github.com/bryantBaumgartner/poke">Github</a>.</p>
+        <p>The Pokemon data is sourced from <a href="https://pokeapi.co/">PokeAPI</a>, a free and open-sourced RESTful Pokemon API.</p>
+        <p>The background svg was generated at <a href="https://bgjar.com/">BGJar.com</a>.</p>
+        <br />
+        <p>Pokemparison is not affiliated with Nintendo and does not own or claim any rights to any Nintendo trademark or the Pokémon trademark, and all references to such are used for commentary and informational purposes only.</p>
+      </div>
+      <br />
+      <div class="pill-group">
+        <button class="pill"
+                (click)="setMode(0)">
+          <span class="reroll">Back To Menu</span>
+        </button>
+      </div>
+      </div>
+  </div>
+</main>
+
 <main *ngIf="mode == 0">
   <header>
-    <h1>POKeMPARISON</h1>
+    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
+    <div class="fill"></div>
+    <h2 class="click" (click)="setMode(-1)">About</h2>
   </header>
 
   <div class="content">
@@ -13,47 +43,101 @@
       <div class="pill-group">
         <button class="pill"
                 (click)="setMode(1)">
-          <span class="reroll">Random Mode</span>
+          <span class="reroll">All Pokemon</span>
         </button>
         <button class="pill"
-                (click)="setMode(0)">
+                (click)="setMode(2)">
           <span class="reroll">Gen 1</span>
         </button>
+        <button class="pill"
+                (click)="setMode(3)">
+          <span class="reroll">Gen 2</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(4)">
+          <span class="reroll">Gen 3</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(5)">
+          <span class="reroll">Gen 4</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(6)">
+          <span class="reroll">Gen 5</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(7)">
+          <span class="reroll">Gen 6</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(8)">
+          <span class="reroll">Gen 7</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(9)">
+          <span class="reroll">Gen 8</span>
+        </button>
+        <button class="pill"
+                (click)="setMode(10)">
+          <span class="reroll">Gen 9</span>
+        </button>
       </div>
-      <br />
-      <p>Pokemparisons is not affiliated with Nintendo and does not own or claim any rights to any Nintendo trademark or the Pokémon trademark, and all references to such are used for commentary and informational purposes only.</p>
+      <div class="center pill-group" style="margin-bottom: 0">
+        <h3>Quick Game (20 Questions):</h3>
+        <label class="switch">
+          <input type="checkbox" [checked]="twenty" (click)="changeTwenty()">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="center pill-group" style="margin-top: 0">
+        <h3>Special Forms:</h3>
+        <label class="switch">
+          <input type="checkbox" [checked]="forms" (click)="changeForms()">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <p>Pokemparison is not affiliated with Nintendo and does not own or claim any rights to any Nintendo trademark or the Pokémon trademark, and all references to such are used for commentary and informational purposes only.</p>
     </div>
   </div>
 </main>
 
-<main class="main" *ngIf="mode == 1">
+<main class="main" *ngIf="mode > 0">
   <header>
-    <h1>POKeMPARISON</h1>
+    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
+    <div class="fill"></div>
+    <h2 class="click" (click)="setMode(-1)">About</h2>
   </header>
 
   <div *ngIf="pokemon.length == 0">
-    <div class="center">
-      <h1>Loading...</h1>
+    <div class="content">
+      <div class="center">
+        <h1>Loading...</h1>
+      </div>
+      <button class="pill"
+              (click)="setScenario()">
+        <span class="reroll">Force reload</span>
+      </button>
     </div>
   </div>
 
   <div class="content" *ngIf="pokemon.length > 0">
     <div class="left">
-      <p class="answer neutral">{{ score + " / " + total }}</p>
+      <p class="answer neutral">{{ score + " / " + (twenty ? 20 : total) }}</p>
       <div class="fill"></div>
       <p class="answer right" *ngIf="correct == 'Y'">Correct!</p>
       <p class="answer wrong" *ngIf="correct == 'N'">Incorrect!</p>
     </div>
+    <br />
     <div class="center">
       <h1>{{ question }}</h1>
     </div>
     <div class="left-side pointer" (click)="checkAnswer(0)">
       <img src="{{ images[0] }}" width="150" />
-      <h1>{{ pokemon[0].name.toUpperCase().replace('-',' ') }}</h1>
+      <h1>{{ pokemon[0] != null ? pokemon[0].name.toUpperCase().replace('-',' ') : "" }}</h1>
     </div>
     <div class="right-side pointer" (click)="checkAnswer(1)">
       <img src="{{ images[1] }}" width="150" />
-      <h1>{{ pokemon[1].name.toUpperCase().replace('-',' ') }}</h1>
+      <h1>{{ pokemon[1] != null ? pokemon[1].name.toUpperCase().replace('-',' ') : "" }}</h1>
     </div>
     <div class="center">
       <div class="pill-group">
@@ -62,9 +146,33 @@
           <span class="reroll">Reroll</span>
         </button>
         <!--href="https://twitter.com/intent/tweet?text=Hello%20world"-->
-        <a class="pill">
+        <!--<a class="pill">
           <span class="reroll">Tweet Score</span>
-        </a>
+        </a>-->
+        <button class="pill"
+                (click)="setMode(0)">
+          <span class="reroll">Back To Menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<main *ngIf="mode == -2">
+  <header>
+    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
+    <div class="fill"></div>
+    <h2 class="click" (click)="setMode(-1)">About</h2>
+  </header>
+
+  <div class="content">
+    <div class="center">
+      <div class="center">
+        <h1>{{ (score / total) * 100 }}%</h1>
+        <p>You scored {{ score }} out of {{ total }} questions!</p>
+      </div>
+      <br />
+      <div class="pill-group">
         <button class="pill"
                 (click)="setMode(0)">
           <span class="reroll">Back To Menu</span>
@@ -76,9 +184,6 @@
 
 <footer>
   <p>&copy; Bryant Baumgartner 2024</p>
-  <!--<pre>Pokemparisons is not affiliated with Nintendo and does not own or claim any rights to any
-Nintendo trademark or the Pokémon trademark, and all references to such are used for
-commentary and informational purposes only.</pre>-->
 </footer>
 
 <!--https://bgjar.com/-->
