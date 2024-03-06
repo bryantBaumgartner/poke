@@ -122,7 +122,7 @@
 
   <div class="content" *ngIf="pokemon.length > 0">
     <div class="left">
-      <p class="answer neutral">{{ score + " / " + (twenty ? 20 : total) }}</p>
+      <p class="answer neutral">{{ twenty ? (total + " / " + 20) : (score + " / " + total) }}</p>
       <div class="fill"></div>
       <p class="answer right" *ngIf="correct == 'Y'">Correct!</p>
       <p class="answer wrong" *ngIf="correct == 'N'">Incorrect!</p>
