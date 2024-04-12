@@ -171,6 +171,10 @@ footer p {
     text-decoration: none;
   }
 
+.fade {
+  transition: background 0.3s ease;
+}
+
   header .score {
     padding-inline: 0.75rem;
   }
