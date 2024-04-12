@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
   score = 0;
   total = 0;
   correct = "";
+  rerollVal = true;
 
   question = "";
   type = 0;
@@ -41,18 +42,23 @@ export class AppComponent implements OnInit {
   tertiary = 0;
 
   pokemon: Pokemon[] = [];
+  subSetPokemon: Pokemon[] = []; //Used to have a cache of pokemon
   images: string[] = [];
+  loadingText: string = "Loading questions...";
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
   }
 
-  setMode(mode: number) {
+  async setMode(mode: number) {
     this.mode = mode;
+    this.setLoadText();
     if (this.mode <= 0) {
       this.reset();
     } else {
+      this.subSetPokemon = [];
+      await this.getSubSetRandomPokemon();
       this.setScenario();
     }
   }
@@ -90,8 +96,8 @@ export class AppComponent implements OnInit {
         break;
 
       case 3: //Gen 2 and so on
-        this.currentDexNumbers = 152;
-        this.dexOffset = 100;
+        this.currentDexNumbers = 100;
+        this.dexOffset = 152;
         break;
 
       case 4:
@@ -130,6 +136,12 @@ export class AppComponent implements OnInit {
         break;
     }
 
+    //Set the pokemon here so we can inject som customization
+    this.images[0] = "";
+    this.images[1] = "";
+    this.pokemon[0] = this.subSetPokemon[this.total * 2];
+    this.pokemon[1] = this.subSetPokemon[this.total * 2 + 1];
+
     if (this.mode > 0) { //Just in case
       this.type = this.getRandomInt(4);
       switch (this.type) {
@@ -153,8 +165,6 @@ export class AppComponent implements OnInit {
   }
 
   async stats() {
-    this.pokemon[0] = await this.getRandomPokemon();
-    this.pokemon[1] = await this.getRandomPokemon();
     this.images[0] = this.pokemon[0].sprites?.other?.home['front_default'] ?? "";
     this.images[1] = this.pokemon[1].sprites?.other?.home['front_default'] ?? "";
 
@@ -189,8 +199,6 @@ export class AppComponent implements OnInit {
   }
 
   async baseStats() {
-    this.pokemon[0] = await this.getRandomPokemon();
-    this.pokemon[1] = await this.getRandomPokemon();
     this.images[0] = this.pokemon[0].sprites?.other?.home['front_default'] ?? "";
     this.images[1] = this.pokemon[1].sprites?.other?.home['front_default'] ?? "";
 
@@ -214,8 +222,6 @@ export class AppComponent implements OnInit {
   }
 
   async shiny() {
-    this.pokemon[0] = await this.getRandomPokemon();
-    this.pokemon[1] = await this.getRandomPokemon();
     if (this.getRandomInt(2) == 0) {
       this.images[0] = this.pokemon[0].sprites?.other?.home['front_shiny'] ?? "";
       this.images[1] = this.pokemon[1].sprites?.other?.home['front_default'] ?? "";
@@ -230,8 +236,6 @@ export class AppComponent implements OnInit {
   }
 
   async ability() {
-    this.pokemon[0] = await this.getRandomPokemon();
-    this.pokemon[1] = await this.getRandomPokemon();
     this.images[0] = this.pokemon[0].sprites?.other?.home['front_default'] ?? "";
     this.images[1] = this.pokemon[1].sprites?.other?.home['front_default'] ?? "";
 
@@ -248,6 +252,7 @@ export class AppComponent implements OnInit {
   }
 
   checkAnswer(answer: number) {
+    this.rerollVal = true;
     switch (this.type) {
       default:
         this.checkStats(answer);
@@ -348,12 +353,12 @@ export class AppComponent implements OnInit {
     this.setScenario();
   }
 
-  reroll() {
-    if (confirm("Do you want to pay 1 point to reroll the question?"))
+  async reroll() {
+    if (this.rerollVal)
     {
-      this.score = this.clamp(this.score - 1, 0, 999);
-      this.correct = "";
-
+      this.rerollVal = false;
+      this.subSetPokemon[this.total * 2] = await this.getRandomPokemon();
+      this.subSetPokemon[this.total * 2 + 1] = await this.getRandomPokemon();
       this.setScenario();
     }
   }
@@ -379,8 +384,37 @@ export class AppComponent implements OnInit {
       return await this.apiService.getPokemon(dex);
     }
   }
+  async getSubSetRandomPokemon(val: number = 20) {
+    this.subSetPokemon = [];
+    for (let i = 0; i < val * 2; i++) {
+      this.subSetPokemon[i] = await this.getRandomPokemon();
+    }
+  }
   clamp(num: number, min: number, max: number) {
     return Math.min(Math.max(num, min), max)
+  }
+  setLoadText() {
+    switch (this.getRandomInt(5)) {
+      default:
+        this.loadingText = "Training effort values...";
+        break;
+
+      case 1:
+        this.loadingText = "Catching them all...";
+        break;
+
+      case 2:
+        this.loadingText = "Defeating gym leaders...";
+        break;
+
+      case 3:
+        this.loadingText = "Hunting shinies...";
+        break;
+
+      case 4:
+        this.loadingText = "Buying repels...";
+        break;
+    }
   }
 }
 

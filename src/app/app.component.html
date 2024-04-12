@@ -83,13 +83,14 @@
           <span class="reroll">Gen 9</span>
         </button>
       </div>
-      <div class="center pill-group" style="margin-bottom: 0">
-        <h3>Quick Game (20 Questions):</h3>
+      <br />
+      <!--<div class="center pill-group" style="margin-bottom: 0">
+        <h3>Long Game (20 Questions):</h3>
         <label class="switch">
           <input type="checkbox" [checked]="twenty" (click)="changeTwenty()">
           <span class="slider round"></span>
         </label>
-      </div>
+      </div>-->
       <div class="center pill-group" style="margin-top: 0">
         <h3>Special Forms:</h3>
         <label class="switch">
@@ -112,12 +113,13 @@
   <div *ngIf="pokemon.length == 0">
     <div class="content">
       <div class="center">
-        <h1>Loading...</h1>
+        <h1>{{ loadingText }}</h1>
+        <h1>{{ "▰".repeat(subSetPokemon.length / 4) }}</h1>
       </div>
-      <button class="pill"
+      <!--<button class="pill"
               (click)="setScenario()">
         <span class="reroll">Force reload</span>
-      </button>
+      </button>-->
     </div>
   </div>
 
@@ -132,17 +134,17 @@
     <div class="center">
       <h1>{{ question }}</h1>
     </div>
-    <div class="left-side pointer" (click)="checkAnswer(0)">
+    <div *ngIf="images[0] != ''" class="left-side pointer" (click)="checkAnswer(0)">
       <img src="{{ images[0] }}" width="150" />
       <h1>{{ pokemon[0] != null ? pokemon[0].name.toUpperCase().replace('-',' ') : "" }}</h1>
     </div>
-    <div class="right-side pointer" (click)="checkAnswer(1)">
+    <div *ngIf="images[1] != ''" class="right-side pointer" (click)="checkAnswer(1)">
       <img src="{{ images[1] }}" width="150" />
       <h1>{{ pokemon[1] != null ? pokemon[1].name.toUpperCase().replace('-',' ') : "" }}</h1>
     </div>
     <div class="center">
       <div class="pill-group">
-        <button class="pill"
+        <button *ngIf="rerollVal == true" class="pill"
                 (click)="reroll()">
           <span class="reroll">Reroll</span>
         </button>
@@ -184,7 +186,7 @@
 </main>
 
 <footer>
-  <p>&copy; Bryant Baumgartner 2024</p>
+  <!--<p>&copy; Bryant Baumgartner 2024</p>-->
 </footer>
 
 <!--https://bgjar.com/-->
