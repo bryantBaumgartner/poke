@@ -1,15 +1,19 @@
-<main *ngIf="mode == -1">
-  <header>
-    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
-    <div class="fill"></div>
-    <h2 class="click" (click)="setMode(-1)">About</h2>
-  </header>
+<header>
+  <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
+  <div class="fill"></div>
+  <h2 class="click" (click)="setMode(-1)">About</h2>
+</header>
 
+<main *ngIf="mode == -1">
   <div class="content">
     <div class="center">
       <div class="center">
         <h1>POKeMPARISON</h1>
-        <h3>v1.1.0 - 4/11/2024</h3>
+        <h3>v1.2.0 - 4/19/2024</h3>
+        <p>
+          The latest update includes: Move questions, a King-of-the-Hill Mode (the pokemon you selected stays for the next question), faster load times (by loading the next question in advance)
+          and some snazzy new background visuals!
+        </p>
         <br />
         <p>Pokemparison is an Angular app created by Bryant Baumgartner. Pokemparisons is hosted using Git Pages. Any comments or issues can be left in the <a href="https://github.com/bryantBaumgartner/poke/issues">issues tab</a> on the Pokemparisons <a href="https://github.com/bryantBaumgartner/poke">Github</a>.</p>
         <p>The Pokemon data is sourced from <a href="https://pokeapi.co/">PokeAPI</a>, a free and open-sourced RESTful Pokemon API.</p>
@@ -24,21 +28,15 @@
           <span class="reroll">Back To Menu</span>
         </button>
       </div>
-      </div>
+    </div>
   </div>
 </main>
 
 <main *ngIf="mode == 0">
-  <header>
-    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
-    <div class="fill"></div>
-    <h2 class="click" (click)="setMode(-1)">About</h2>
-  </header>
-
   <div class="content">
     <div class="center">
       <div class="center">
-        <h1>POKeMPARISON v1.1.0</h1>
+        <h1>POKeMPARISON</h1>
         <h3>The Pokemon Comparison game!</h3>
       </div>
       <br />
@@ -85,13 +83,20 @@
         </button>
       </div>
       <br />
-      <!--<div class="center pill-group" style="margin-bottom: 0">
-        <h3>Long Game (20 Questions):</h3>
+      <div class="center pill-group" style="margin-bottom: 0">
+        <h3>Quick Game (20 Questions):</h3>
         <label class="switch">
           <input type="checkbox" [checked]="twenty" (click)="changeTwenty()">
           <span class="slider round"></span>
         </label>
-      </div>-->
+      </div>
+      <div class="center pill-group" style="margin-top:0; margin-bottom: 0">
+        <h3>King-of-the-Hill Mode:</h3>
+        <label class="switch">
+          <input type="checkbox" [checked]="king" (click)="changeKing()">
+          <span class="slider round"></span>
+        </label>
+      </div>
       <div class="center pill-group" style="margin-top: 0">
         <h3>Special Forms:</h3>
         <label class="switch">
@@ -105,12 +110,6 @@
 </main>
 
 <main class="main" *ngIf="mode > 0">
-  <header>
-    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
-    <div class="fill"></div>
-    <h2 class="click" (click)="setMode(-1)">About</h2>
-  </header>
-
   <div *ngIf="pokemon.length == 0">
     <div class="content">
       <div class="center">
@@ -133,7 +132,7 @@
     </div>
     <br />
     <div class="center">
-      <h1>{{ question }}</h1>
+      <h1 class="question">{{ question }}</h1>
     </div>
     <div *ngIf="images[0] != ''" class="left-side pointer" (click)="checkAnswer(0)">
       <img src="{{ images[0] }}" width="150" />
@@ -163,12 +162,6 @@
 </main>
 
 <main *ngIf="mode == -2">
-  <header>
-    <h1 class="click" (click)="setMode(0)">POKeMPARISON</h1>
-    <div class="fill"></div>
-    <h2 class="click" (click)="setMode(-1)">About</h2>
-  </header>
-
   <div class="content">
     <div class="center">
       <div class="center">
@@ -186,11 +179,76 @@
   </div>
 </main>
 
-<footer>
-  <!--<p>&copy; Bryant Baumgartner 2024</p>-->
-</footer>
-
+<!--<footer>
+  <p>&copy; Bryant Baumgartner 2024</p>
+</footer>-->
 <!--https://bgjar.com/-->
 <svg id="bubbles" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1440" height="560" preserveAspectRatio="none" viewBox="0 0 1440 560"><g mask="url(&quot;#SvgjsMask1109&quot;)" fill="none"><rect width="1440" height="560" x="0" y="0" fill="rgba(255, 242, 242, 1)"></rect><path d="M0,469.191C85.88,477.778,140.17,377.554,214.991,334.532C295,288.527,409.323,288.014,454.781,207.692C500.255,127.341,467.106,25.017,440.131,-63.281C415.977,-142.344,363.796,-205.844,309.422,-268.116C255.246,-330.161,204.571,-404.58,124.664,-424.568C45.519,-444.365,-37.381,-411.054,-109.494,-372.903C-172.805,-339.408,-208.944,-275.804,-256.969,-222.665C-306.215,-168.175,-384.32,-129.457,-395.159,-56.815C-406.001,15.847,-348.62,78.87,-311.413,142.217C-277.799,199.447,-234.803,246.074,-189.029,294.135C-128.577,357.608,-87.219,460.47,0,469.191" fill="#ffd9d9"></path><path d="M1440 1214.7910000000002C1560.783 1221.752 1633.9859999999999 1080.568 1719.636 995.1220000000001 1788.5149999999999 926.4069999999999 1835.675 846.1700000000001 1890.2440000000001 765.62 1957.149 666.86 2083.176 587.596 2076.398 468.5 2069.674 350.35699999999997 1951.084 270.836 1857.932 197.85899999999998 1777.32 134.70600000000002 1678.891 109.88 1580.856 80.28699999999998 1482.035 50.456999999999994 1381.186-6.635999999999967 1282.679 24.214000000000055 1184.47 54.97000000000003 1144.466 168.233 1070.746 240.04000000000002 988.2429999999999 320.402 847.475 358.703 823.602 471.375 799.852 583.465 888.933 688.171 956.131 780.975 1013.887 860.738 1107.0149999999999 898.304 1180.338 964.043 1271.779 1046.025 1317.392 1207.725 1440 1214.7910000000002" fill="#ffffff"></path></g><defs><mask id="SvgjsMask1109"><rect width="1440" height="560" fill="#ffffff"></rect></mask></defs></svg>
+<svg id="bubbles" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1440" height="560" preserveAspectRatio="none" viewBox="0 0 1440 560">
+  <g mask="url(&quot;#SvgjsMask1509&quot;)" fill="none"><rect width="1440" height="560" x="0" y="0" fill="url(&quot;#SvgjsLinearGradient1510&quot;)"></rect><path d="M147.14,148.929C167.393,149.014,190.42,147.945,200.759,130.53C211.229,112.893,202.081,91.536,191.72,73.834C181.501,56.375,167.336,40.099,147.14,38.921C125.069,37.634,103.631,48.925,92.544,68.052C81.426,87.233,81.895,111.705,94.299,130.08C105.513,146.692,127.097,148.844,147.14,148.929" fill="rgba(149, 95, 115, 0.07)" class="triangle-float2"></path><path d="M132.83 110.12 a99.03 99.03 0 1 0 198.06 0 a99.03 99.03 0 1 0 -198.06 0z" fill="rgba(149, 95, 115, 0.07)" class="triangle-float2"></path><path d="M287.852077043986 615.3295165637107L339.3719046588796 465.70507278855365 189.74746088372248 414.18524517366006 138.22763326882892 563.8096889488172z" fill="rgba(149, 95, 115, 0.1)" class="triangle-float1"></path><path d="M1205.025,360.905C1255.229,359.956,1294.951,322.946,1319.243,279C1342.64,236.673,1349.264,185.626,1325.06,143.755C1300.876,101.919,1253.301,83.549,1205.025,81.412C1151.876,79.06,1092.552,86.7,1065.061,132.248C1036.947,178.828,1054.666,237.063,1083.071,283.467C1110.016,327.486,1153.423,361.881,1205.025,360.905" fill="rgba(149, 95, 115, 0.10)" class="triangle-float3"></path><path d="M1143.4452630349738 448.6632662653088L1305.1852974711005 445.840083462734 1302.362114668526 284.1000490266073 1140.622080232399 286.923231829182z" fill="rgba(149, 95, 115, 0.07)" class="triangle-float1"></path><path d="M232.36 376.27 a145.77 145.77 0 1 0 291.54 0 a145.77 145.77 0 1 0 -291.54 0z" fill="rgba(149, 95, 115, 0.07)" class="triangle-float2"></path></g>
+  <defs>
+    <mask id="SvgjsMask1509"><rect width="1440" height="560" fill="#ffffff"></rect></mask>
+    <linearGradient x1="15.28%" y1="-39.29%" x2="84.72%" y2="139.29%" gradientUnits="userSpaceOnUse" id="SvgjsLinearGradient1510"><stop stop-color="rgba(255, 255, 255, 0)" offset="0"></stop><stop stop-color="rgba(255, 255, 255, 0)" offset="1"></stop></linearGradient>
+    <style>
+      @keyframes float1 {
+        0% {
+          transform: translate(0, 0)
+        }
+
+        50% {
+          transform: translate(-10px, 0)
+        }
+
+        100% {
+          transform: translate(0, 0)
+        }
+      }
+
+      .triangle-float1 {
+        animation: float1 5s infinite;
+      }
+
+      @keyframes float2 {
+        0% {
+          transform: translate(0, 0)
+        }
+
+        50% {
+          transform: translate(-5px, -5px)
+        }
+
+        100% {
+          transform: translate(0, 0)
+        }
+      }
+
+      .triangle-float2 {
+        animation: float2 4s infinite;
+      }
+
+      @keyframes float3 {
+        0% {
+          transform: translate(0, 0)
+        }
+
+        50% {
+          transform: translate(0, -10px)
+        }
+
+        100% {
+          transform: translate(0, 0)
+        }
+      }
+
+      .triangle-float3 {
+        animation: float3 6s infinite;
+      }
+    </style>
+  </defs>
+</svg>
+
+<!--<iframe id="player" width="0" height="0" allow="autoplay"
+        src="https://www.youtube.com/embed/ocl-uYRmEL0?autoplay=1&loop=1&autohide=1">
+</iframe>-->
 
 <router-outlet />

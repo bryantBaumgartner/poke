@@ -30,6 +30,11 @@ export class AppComponent implements OnInit {
   changeForms() {
     this.forms = !this.forms;
   }
+  king = false;
+  kingAnswer = 0;
+  changeKing() {
+    this.king = !this.king;
+  }
 
   score = 0;
   total = 0;
@@ -57,8 +62,6 @@ export class AppComponent implements OnInit {
     if (this.mode <= 0) {
       this.reset();
     } else {
-      this.subSetPokemon = [];
-      await this.getSubSetRandomPokemon();
       this.setScenario();
     }
   }
@@ -67,12 +70,13 @@ export class AppComponent implements OnInit {
     this.score = 0;
     this.total = 0;
     this.pokemon = [];
+    this.subSetPokemon = [];
     this.images = [];
     this.correct = "";
   }
 
-  setScenario() {
-    this.pokemon = [];
+  async setScenario() {
+    if (!(this.king && this.total > 0)) this.pokemon = [];
     this.images = [];
     this.question = "";
 
@@ -136,14 +140,18 @@ export class AppComponent implements OnInit {
         break;
     }
 
-    //Set the pokemon here so we can inject som customization
-    this.images[0] = "";
-    this.images[1] = "";
-    this.pokemon[0] = this.subSetPokemon[this.total * 2];
-    this.pokemon[1] = this.subSetPokemon[this.total * 2 + 1];
+    //Set the pokemon here so we can inject some customization
+    if (this.king && this.total > 0) {
+      //this.pokemon[this.kingAnswer]; Keep the one you selected the same
+      this.pokemon[Math.abs(this.kingAnswer - 1)] = this.subSetPokemon[Math.abs(this.kingAnswer - 1)] != null ? this.subSetPokemon[Math.abs(this.kingAnswer - 1)] : await this.getRandomPokemon();
+    }
+    else {
+      this.pokemon[0] = this.subSetPokemon[0] != null ? this.subSetPokemon[0] : await this.getRandomPokemon();
+      this.pokemon[1] = this.subSetPokemon[1] != null ? this.subSetPokemon[1] : await this.getRandomPokemon();
+    }
 
     if (this.mode > 0) { //Just in case
-      this.type = this.getRandomInt(4);
+      this.type = this.getRandomInt(5);
       switch (this.type) {
         default:
           this.stats();
@@ -160,8 +168,17 @@ export class AppComponent implements OnInit {
         case 3:
           this.ability();
           break;
+
+
+        case 4:
+          this.move();
+          break;
       }
     }
+
+    //Run this after we get the images
+    this.subSetPokemon[0] = await this.getRandomPokemon();
+    this.subSetPokemon[1] = await this.getRandomPokemon();
   }
 
   async stats() {
@@ -251,7 +268,24 @@ export class AppComponent implements OnInit {
     }
   }
 
+  async move() {
+    this.images[0] = this.pokemon[0].sprites?.other?.home['front_default'] ?? "";
+    this.images[1] = this.pokemon[1].sprites?.other?.home['front_default'] ?? "";
+
+    this.question = "Which can learn ";
+
+    this.secondary = this.getRandomInt(2);
+    if (this.secondary == 0) {
+      this.tertiary = this.getRandomInt(this.pokemon[0].moves.length);
+      this.question += this.pokemon[0].moves[this.tertiary].move.name.toUpperCase() + "?";
+    } else {
+      this.tertiary = this.getRandomInt(this.pokemon[1].moves.length);
+      this.question += this.pokemon[1].moves[this.tertiary].move.name.toUpperCase() + "?";
+    }
+  }
+
   checkAnswer(answer: number) {
+    this.kingAnswer = answer;
     this.rerollVal = true;
     switch (this.type) {
       default:
@@ -268,6 +302,10 @@ export class AppComponent implements OnInit {
 
       case 3:
         this.checkAbility(answer);
+        break;
+
+      case 4:
+        this.checkMove(answer);
         break;
     }
   }
@@ -353,6 +391,21 @@ export class AppComponent implements OnInit {
     this.setScenario();
   }
 
+  checkMove(answer: number) {
+    this.correct = "N";
+
+    for (let i = 0; i < this.pokemon[answer].moves.length; i++) {
+      if (this.pokemon[answer].moves[i].move.name == this.pokemon[this.secondary].moves[this.tertiary].move.name) {
+        this.score += 1;
+        this.correct = "Y"
+        break;
+      }
+    }
+
+    this.total += 1;
+    this.setScenario();
+  }
+
   async reroll() {
     if (this.rerollVal)
     {
@@ -418,3 +471,7 @@ export class AppComponent implements OnInit {
   }
 }
 
+function onPlayerReady(event: any) {
+  // Set the volume to 50% when the player is ready
+  event.target.setVolume(50);
+}
