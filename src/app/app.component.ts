@@ -35,6 +35,9 @@ export class AppComponent implements OnInit {
   changeKing() {
     this.king = !this.king;
   }
+  daily = false;
+  dailyToken = 0;
+  dailyCheckSum = 0;
 
   score = 0;
   total = 0;
@@ -54,6 +57,8 @@ export class AppComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
+    const time = new Date();
+    this.dailyToken = +(time.getDay() + "11" +  time.getMonth() + "16" + time.getFullYear())
   }
 
   async setMode(mode: number) {
@@ -73,12 +78,25 @@ export class AppComponent implements OnInit {
     this.subSetPokemon = [];
     this.images = [];
     this.correct = "";
+    this.daily = false;
+    this.dailyCheckSum = 0;
   }
 
   async setScenario() {
     if (!(this.king && this.total > 0)) this.pokemon = [];
     this.images = [];
     this.question = "";
+
+    if (this.mode == 99) {
+      this.daily = true;
+      this.twenty = true;
+      this.king = false;
+      this.forms = true;
+      this.dailyCheckSum = 0;
+    }
+    if (this.daily == true && this.mode == 99) {
+      this.mode = this.getRandomInt(10) + 1;
+    }
 
     if (this.twenty == true && this.total >= 20) {
       this.mode = -2;
@@ -148,6 +166,13 @@ export class AppComponent implements OnInit {
     else {
       this.pokemon[0] = this.subSetPokemon[0] != null ? this.subSetPokemon[0] : await this.getRandomPokemon();
       this.pokemon[1] = this.subSetPokemon[1] != null ? this.subSetPokemon[1] : await this.getRandomPokemon();
+      this.subSetPokemon = [];
+    }
+
+    //Run this BEFORE so the daily's don't get shuffled around
+    if (this.daily) {
+      this.subSetPokemon[0] = await this.getRandomPokemon();
+      this.subSetPokemon[1] = await this.getRandomPokemon();
     }
 
     if (this.mode > 0) { //Just in case
@@ -176,9 +201,11 @@ export class AppComponent implements OnInit {
       }
     }
 
-    //Run this after we get the images
-    this.subSetPokemon[0] = await this.getRandomPokemon();
-    this.subSetPokemon[1] = await this.getRandomPokemon();
+    //Run this after we get the images (NORMALLY)
+    if (!this.daily) {
+      this.subSetPokemon[0] = await this.getRandomPokemon();
+      this.subSetPokemon[1] = await this.getRandomPokemon();
+    }
   }
 
   async stats() {
@@ -285,6 +312,7 @@ export class AppComponent implements OnInit {
   }
 
   checkAnswer(answer: number) {
+    if (this.daily && this.subSetPokemon[1] == undefined) { return; }
     this.kingAnswer = answer;
     this.rerollVal = true;
     switch (this.type) {
@@ -410,15 +438,23 @@ export class AppComponent implements OnInit {
     if (this.rerollVal)
     {
       this.rerollVal = false;
-      this.subSetPokemon[this.total * 2] = await this.getRandomPokemon();
-      this.subSetPokemon[this.total * 2 + 1] = await this.getRandomPokemon();
+      this.subSetPokemon[0] = await this.getRandomPokemon();
+      this.subSetPokemon[1] = await this.getRandomPokemon();
       this.setScenario();
     }
   }
 
   //Utilities
   getRandomInt(max: number) {
-    return Math.floor(Math.random() * max);
+    if (this.daily) {
+      return this.getSeedableRandomInt(max);
+    } else {
+      return Math.floor(Math.random() * max);
+    }
+  }
+  getSeedableRandomInt(max: number) {
+    if (this.dailyCheckSum == 0) alert(this.dailyCheckSum);
+    return (this.dailyToken + (this.dailyCheckSum++ * 16)) % max;
   }
   async getRandomPokemon() {
     if (this.forms) {
