@@ -36,8 +36,7 @@ export class AppComponent implements OnInit {
     this.king = !this.king;
   }
   daily = false;
-  dailyToken = 0;
-  dailyCheckSum = 0;
+  challenge: challenge = new challenge();
 
   score = 0;
   total = 0;
@@ -57,8 +56,7 @@ export class AppComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    const time = new Date();
-    this.dailyToken = +(time.getDay() + "11" +  time.getMonth() + "16" + time.getFullYear())
+    this.challenge = new challenge();
   }
 
   async setMode(mode: number) {
@@ -79,7 +77,6 @@ export class AppComponent implements OnInit {
     this.images = [];
     this.correct = "";
     this.daily = false;
-    this.dailyCheckSum = 0;
   }
 
   async setScenario() {
@@ -91,8 +88,7 @@ export class AppComponent implements OnInit {
       this.daily = true;
       this.twenty = true;
       this.king = false;
-      this.forms = true;
-      this.dailyCheckSum = 0;
+      this.forms = false;
     }
     if (this.daily == true && this.mode == 99) {
       this.mode = this.getRandomInt(10) + 1;
@@ -163,20 +159,20 @@ export class AppComponent implements OnInit {
       //this.pokemon[this.kingAnswer]; Keep the one you selected the same
       this.pokemon[Math.abs(this.kingAnswer - 1)] = this.subSetPokemon[Math.abs(this.kingAnswer - 1)] != null ? this.subSetPokemon[Math.abs(this.kingAnswer - 1)] : await this.getRandomPokemon();
     }
+    else if (this.daily && this.total < 20) {
+      const q = this.challenge.questions[this.total];
+      this.pokemon[0] = this.subSetPokemon[0] != null && this.total < 19 ? this.subSetPokemon[0] : await this.getSpecificPokemon(q.options[0]);
+      this.pokemon[1] = this.subSetPokemon[1] != null && this.total < 19 ? this.subSetPokemon[1] : await this.getSpecificPokemon(q.options[1]);
+      this.subSetPokemon = [];
+    }
     else {
       this.pokemon[0] = this.subSetPokemon[0] != null ? this.subSetPokemon[0] : await this.getRandomPokemon();
       this.pokemon[1] = this.subSetPokemon[1] != null ? this.subSetPokemon[1] : await this.getRandomPokemon();
       this.subSetPokemon = [];
     }
 
-    //Run this BEFORE so the daily's don't get shuffled around
-    if (this.daily) {
-      this.subSetPokemon[0] = await this.getRandomPokemon();
-      this.subSetPokemon[1] = await this.getRandomPokemon();
-    }
-
     if (this.mode > 0) { //Just in case
-      this.type = this.getRandomInt(5);
+      this.type = this.daily ? this.challenge.questions[this.total].questionType : this.getRandomInt(5);
       switch (this.type) {
         default:
           this.stats();
@@ -194,7 +190,6 @@ export class AppComponent implements OnInit {
           this.ability();
           break;
 
-
         case 4:
           this.move();
           break;
@@ -202,10 +197,16 @@ export class AppComponent implements OnInit {
     }
 
     //Run this after we get the images (NORMALLY)
-    if (!this.daily) {
+    /*    if (!this.daily) {*/
+    if (this.daily && this.total <= 18) {
+      const q = this.challenge.questions[this.total + 1];
+      this.subSetPokemon[0] = await this.getSpecificPokemon(q.options[0]);
+      this.subSetPokemon[1] = await this.getSpecificPokemon(q.options[1]);
+    } else {
       this.subSetPokemon[0] = await this.getRandomPokemon();
       this.subSetPokemon[1] = await this.getRandomPokemon();
     }
+/*    }*/
   }
 
   async stats() {
@@ -214,7 +215,7 @@ export class AppComponent implements OnInit {
 
     this.question = "Which has a higher ";
 
-    this.secondary = this.getRandomInt(6);
+    this.secondary = this.daily ? this.challenge.questions[this.total].questionSubType[0] % 6 : this.getRandomInt(6);
     switch (this.secondary) {
       default:
         this.question += "HP?";
@@ -248,7 +249,7 @@ export class AppComponent implements OnInit {
 
     this.question = "Which has a BASE STAT TOTAL of ";
 
-    if (this.getRandomInt(2) == 0) {
+    if ((this.daily ? this.challenge.questions[this.total].questionSubType[0] % 2 : this.getRandomInt(2)) == 0) {
       this.secondary = 0;
       for (let i = 0; i < 6; i++){
         this.secondary += this.pokemon[0].stats[i].base_stat;
@@ -266,7 +267,7 @@ export class AppComponent implements OnInit {
   }
 
   async shiny() {
-    if (this.getRandomInt(2) == 0) {
+    if ((this.daily ? this.challenge.questions[this.total].questionSubType[0] % 2 : this.getRandomInt(2)) == 0) {
       this.images[0] = this.pokemon[0].sprites?.other?.home['front_shiny'] ?? "";
       this.images[1] = this.pokemon[1].sprites?.other?.home['front_default'] ?? "";
       this.secondary = 0;
@@ -285,12 +286,14 @@ export class AppComponent implements OnInit {
 
     this.question = "Which has the ability ";
 
-    this.secondary = this.getRandomInt(2);
+    this.secondary = this.daily ? this.challenge.questions[this.total].questionSubType[0] % 2 : this.getRandomInt(2);
     if (this.secondary == 0) {
-      this.tertiary = this.getRandomInt(this.pokemon[0].abilities.length);
+      this.tertiary = this.daily ? this.challenge.questions[this.total].questionSubType[1] % this.pokemon[0].abilities.length :
+        this.getRandomInt(this.pokemon[0].abilities.length);
       this.question += this.pokemon[0].abilities[this.tertiary].ability.name.toUpperCase() + "?";
     } else {
-      this.tertiary = this.getRandomInt(this.pokemon[1].abilities.length);
+      this.tertiary = this.daily ? this.challenge.questions[this.total].questionSubType[1] % this.pokemon[1].abilities.length :
+        this.getRandomInt(this.pokemon[1].abilities.length);
       this.question += this.pokemon[1].abilities[this.tertiary].ability.name.toUpperCase() + "?";
     }
   }
@@ -301,18 +304,19 @@ export class AppComponent implements OnInit {
 
     this.question = "Which can learn ";
 
-    this.secondary = this.getRandomInt(2);
+    this.secondary = this.daily ? this.challenge.questions[this.total].questionSubType[0] % 2 : this.getRandomInt(2);
     if (this.secondary == 0) {
-      this.tertiary = this.getRandomInt(this.pokemon[0].moves.length);
+      this.tertiary = this.daily ? this.challenge.questions[this.total].questionSubType[1] % this.pokemon[0].moves.length :
+        this.getRandomInt(this.pokemon[0].moves.length);
       this.question += this.pokemon[0].moves[this.tertiary].move.name.toUpperCase() + "?";
     } else {
-      this.tertiary = this.getRandomInt(this.pokemon[1].moves.length);
+      this.tertiary = this.daily ? this.challenge.questions[this.total].questionSubType[1] % this.pokemon[1].moves.length :
+        this.getRandomInt(this.pokemon[1].moves.length);
       this.question += this.pokemon[1].moves[this.tertiary].move.name.toUpperCase() + "?";
     }
   }
 
   checkAnswer(answer: number) {
-    if (this.daily && this.subSetPokemon[1] == undefined) { return; }
     this.kingAnswer = answer;
     this.rerollVal = true;
     switch (this.type) {
@@ -445,24 +449,16 @@ export class AppComponent implements OnInit {
   }
 
   //Utilities
-  getRandomInt(max: number) {
-    if (this.daily) {
-      return this.getSeedableRandomInt(max);
-    } else {
-      return Math.floor(Math.random() * max);
-    }
-  }
-  getSeedableRandomInt(max: number) {
-    if (this.dailyCheckSum == 0) alert(this.dailyCheckSum);
-    return (this.dailyToken + (this.dailyCheckSum++ * 16)) % max;
+  getRandomInt(max: number, checkSumValue: number = 0) {
+    return Math.floor(Math.random() * max);
   }
   async getRandomPokemon() {
     if (this.forms) {
-      let dex = (this.getRandomInt(this.currentDexNumbers) + this.dexOffset).toString();
+      let dex = (this.getRandomInt(this.currentDexNumbers, 1) + this.dexOffset).toString();
       let name = await this.apiService.getPokemonSpecies(dex);
 
       if (name.varieties.length > 0) {
-        return await this.apiService.getPokemon(name.varieties[this.getRandomInt(name.varieties.length)].pokemon.name)
+        return await this.apiService.getPokemon(name.varieties[this.getRandomInt(name.varieties.length, 1)].pokemon.name)
       }
       else {
         return await this.apiService.getPokemon(dex);
@@ -472,6 +468,10 @@ export class AppComponent implements OnInit {
       let dex = (this.getRandomInt(this.currentDexNumbers) + this.dexOffset).toString();
       return await this.apiService.getPokemon(dex);
     }
+  }
+  async getSpecificPokemon(val: number) {
+    let dex = val.toString();
+    return await this.apiService.getPokemon(dex);
   }
   async getSubSetRandomPokemon(val: number = 20) {
     this.subSetPokemon = [];
@@ -507,7 +507,36 @@ export class AppComponent implements OnInit {
   }
 }
 
-function onPlayerReady(event: any) {
-  // Set the volume to 50% when the player is ready
-  event.target.setVolume(50);
+class challenge {
+  seed: number = 0;
+  checkSum: number = 0;
+  questions: question[] = [];
+  max: number = 1025;
+
+  constructor() {
+    const time = new Date();
+    this.seed = +(time.getDay() + "11" + time.getMonth() + "16" + time.getFullYear())
+    for (let i = 0; i < 20; i++) {
+      this.questions[i] = new question(this.max, this.seed, this.checkSum+=3);
+    }
+  }
+}
+
+class question {
+  options: number[] = [];
+  questionType: number = 0;
+  questionSubType: number[] = [];
+
+  constructor(maxPokemon: number, dailyToken: number, checkSum: number) {
+    this.questionType = this.getSeedableRandomInt(5, dailyToken, checkSum++);
+    this.questionSubType[0] = this.getSeedableRandomInt(10, dailyToken, checkSum++);
+    this.questionSubType[1] = this.getSeedableRandomInt(10, dailyToken, checkSum++);
+    this.options[0] = this.getSeedableRandomInt(maxPokemon, dailyToken, checkSum++);
+    this.options[1] = this.getSeedableRandomInt(maxPokemon, dailyToken, checkSum++);
+  }
+
+  getSeedableRandomInt(max: number, dailyToken: number, checkSum: number) {
+    /*    if (this.dailyCheckSum == 0) alert(this.dailyCheckSum);*/
+    return (dailyToken + (checkSum * 16)) % max;
+  }
 }
