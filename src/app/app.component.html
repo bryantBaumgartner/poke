@@ -9,10 +9,10 @@
     <div class="center">
       <div class="center">
         <h1>POKeMPARISON</h1>
-        <h3>v1.2.0 - 4/19/2024</h3>
+        <h3>v1.2.1 - 4/21/2024</h3>
         <p>
-          The latest update includes: Move questions, a King-of-the-Hill Mode (the pokemon you selected stays for the next question), faster load times (by loading the next question in advance)
-          and some snazzy new background visuals!
+          The latest update includes: A daily challenge, move questions, a King-of-the-Hill mode (the pokemon you selected stays for the next question),
+          faster load times (by loading the next question in advance) and some snazzy new background visuals!
         </p>
         <br />
         <p>Pokemparison is an Angular app created by Bryant Baumgartner. Pokemparisons is hosted using Git Pages. Any comments or issues can be left in the <a href="https://github.com/bryantBaumgartner/poke/issues">issues tab</a> on the Pokemparisons <a href="https://github.com/bryantBaumgartner/poke">Github</a>.</p>
@@ -39,8 +39,11 @@
         <h1>POKeMPARISON</h1>
         <h3>The Pokemon Comparison game!</h3>
       </div>
-      <br />
       <div class="pill-group">
+        <button class="pill challenge"
+                (click)="setMode(99)">
+          <span class="reroll">Daily Challenge</span>
+        </button>
         <button class="pill"
                 (click)="setMode(1)">
           <span class="reroll">All Pokemon</span>
@@ -81,12 +84,7 @@
                 (click)="setMode(10)">
           <span class="reroll">Gen 9</span>
         </button>
-        <!--<button class="pill"
-                (click)="setMode(99)">
-          <span class="reroll">Daily Challenge</span>
-        </button>-->
       </div>
-      <br />
       <div class="center pill-group" style="margin-bottom: 0">
         <h3>Quick Game (20 Questions):</h3>
         <label class="switch">
@@ -117,8 +115,7 @@
   <div *ngIf="pokemon.length == 0">
     <div class="content">
       <div class="center">
-        <h1>{{ loadingText }}</h1>
-        <h1>{{ "▰".repeat(subSetPokemon.length / 4) }}</h1>
+        <h1 class="question">{{ loadingText }}</h1>
       </div>
       <!--<button class="pill"
               (click)="setScenario()">
@@ -134,21 +131,20 @@
       <p class="answer right" *ngIf="correct == 'Y'">Correct!</p>
       <p class="answer wrong" *ngIf="correct == 'N'">Incorrect!</p>
     </div>
-    <br />
     <div class="center">
       <h1 class="question">{{ question }}</h1>
     </div>
     <div *ngIf="images[0] != ''" class="left-side pointer" (click)="checkAnswer(0)">
       <img src="{{ images[0] }}" width="150" />
-      <h1>{{ pokemon[0] != null ? pokemon[0].name.toUpperCase().replace('-',' ') : "" }}</h1>
+      <h1 class="question">{{ pokemon[0] != null ? pokemon[0].name.toUpperCase().replace('-',' ') : "" }}</h1>
     </div>
     <div *ngIf="images[1] != ''" class="right-side pointer" (click)="checkAnswer(1)">
       <img src="{{ images[1] }}" width="150" />
-      <h1>{{ pokemon[1] != null ? pokemon[1].name.toUpperCase().replace('-',' ') : "" }}</h1>
+      <h1 class="question">{{ pokemon[1] != null ? pokemon[1].name.toUpperCase().replace('-',' ') : "" }}</h1>
     </div>
     <div class="center">
       <div class="pill-group">
-        <button *ngIf="rerollVal == true" class="pill"
+        <button *ngIf="rerollVal == true && daily == false" class="pill"
                 (click)="reroll()">
           <span class="reroll">Reroll</span>
         </button>
@@ -169,7 +165,7 @@
   <div class="content">
     <div class="center">
       <div class="center">
-        <h1>{{ (score / total) * 100 }}%</h1>
+        <h1 class="question">{{ (score / total) * 100 }}%</h1>
         <p>You scored {{ score }} out of {{ total }} questions!</p>
       </div>
       <br />

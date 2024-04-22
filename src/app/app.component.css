@@ -177,7 +177,7 @@ footer p {
     cursor: pointer;
     padding-inline: 1.75rem;
     padding-block: 0.575rem;
-    border-radius: 0.35rem;
+    border-radius: 0.25rem;
     border: 1px solid black;
     transition: background 0.3s ease;
     font-family: var(--inter-font);
@@ -323,6 +323,12 @@ footer p {
 
 .pill-group svg {
   margin-inline-start: 0.25rem;
+}
+
+.challenge {
+/*  border: none;*/
+  border-radius: 50px;
+  background-color: #ffbfbf;
 }
 
 .reroll {
