@@ -536,7 +536,8 @@ class question {
   }
 
   getSeedableRandomInt(max: number, dailyToken: number, checkSum: number) {
-    /*    if (this.dailyCheckSum == 0) alert(this.dailyCheckSum);*/
-    return (dailyToken + (checkSum * 16)) % max;
+    /*    if (this.dailyCheckSum == 0) alert(this.dailyCheckSum); */
+    /* Better randomization than before */
+    return (dailyToken % checkSum + (checkSum % 16)) % max;
   }
 }
