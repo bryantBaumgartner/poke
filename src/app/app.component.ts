@@ -529,15 +529,20 @@ class question {
 
   constructor(maxPokemon: number, dailyToken: number, checkSum: number) {
     this.questionType = this.getSeedableRandomInt(5, dailyToken, checkSum++);
-    this.questionSubType[0] = this.getSeedableRandomInt(10, dailyToken, checkSum++);
-    this.questionSubType[1] = this.getSeedableRandomInt(10, dailyToken, checkSum++);
+    this.questionSubType[0] = this.getSeedableRandomBinary(50, dailyToken, checkSum++);
+    this.questionSubType[1] = this.getSeedableRandomBinary(50, dailyToken, checkSum++);
     this.options[0] = this.getSeedableRandomInt(maxPokemon, dailyToken, checkSum++);
     this.options[1] = this.getSeedableRandomInt(maxPokemon, dailyToken, checkSum++);
   }
 
   getSeedableRandomInt(max: number, dailyToken: number, checkSum: number) {
     /*    if (this.dailyCheckSum == 0) alert(this.dailyCheckSum); */
-    /* Better randomization than before */
-    return (dailyToken % checkSum + (checkSum % 16)) % max;
+    /* Better randomization for general wide randomization */
+    return (dailyToken + (checkSum * 16)) % max;
+    ;
+  }
+  getSeedableRandomBinary(max: number, dailyToken: number, checkSum: number) {
+    /* Better randomization for binary options */
+    return (dailyToken % checkSum + (checkSum % 16)) % max
   }
 }
